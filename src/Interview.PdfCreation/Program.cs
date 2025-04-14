@@ -33,3 +33,4 @@ app.MapGet("/api/render/city", RenderCityMapEndpoint.Execute)
 
 app.Run();
 
+public partial class Program { }
