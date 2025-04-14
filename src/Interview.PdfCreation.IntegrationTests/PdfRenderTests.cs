@@ -11,11 +11,12 @@ public class PdfRenderTests : IClassFixture<WebApplicationFactory<Program>>
         _factory = factory;
     }
 
-    [Fact]
-    public async Task GivenPdfIsRequested_WhenDarmstadtIsSelected_ThenPdfIsCreated()
+    [Theory]
+    [InlineData("Darmstadt")]
+    [InlineData("New York")]
+    public async Task GivenPdfIsRequested_WhenDarmstadtIsSelected_ThenPdfIsCreated(string cityName)
     {
         // Arrange
-        var cityName = "Darmstadt";
         using var client = _factory.CreateClient();
 
         // Act

@@ -9,9 +9,15 @@ public static class RenderCityMapEndpoint
 {
     public static async Task<FileContentHttpResult> Execute(string city, IBrowserWrapper browserWrapper)
     {
+        var cityEncoded = city.Replace(" ", "%2B");
         var page = await browserWrapper.GetPage();
-        await page.GotoAsync("https://consent.google.com/m?continue=https://www.google.com/maps/place/" + city + "&gl=DE&m=0&pc=m&uxe=eomtm&cm=2&hl=en&src=1");
-        await page.GetByRole(AriaRole.Heading, new() { Name = city }).ClickAsync();
+        await page.GotoAsync("https://consent.google.com/m?continue=https://www.google.com/maps/place/" + cityEncoded + "&gl=DE&m=0&pc=m&uxe=eomtm&cm=2&hl=en&src=1");
+
+        if (!page.Url.StartsWith("https://www.google.com/maps/place"))
+            await page.GetByRole(AriaRole.Button, new() { Name = "Reject all" }).ClickAsync();
+
+        var searchInboxLocator = page.Locator("#searchboxinput");
+        await Assertions.Expect(searchInboxLocator).ToBeVisibleAsync(new() { Timeout = 10000 });
 
         var pdf = await page.PdfAsync(new()
         {
