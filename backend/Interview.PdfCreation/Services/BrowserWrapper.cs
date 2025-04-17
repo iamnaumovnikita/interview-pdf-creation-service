@@ -14,7 +14,7 @@ public class BrowserWrapper : IBrowserWrapper
     private async Task<IBrowser> InitializeBrowser()
     {
         _playwright = await Playwright.CreateAsync();
-        var options = new BrowserTypeLaunchOptions { Headless = true };
+        var options = new BrowserTypeLaunchOptions { Headless = false };
         return await _playwright.Chromium.LaunchAsync(options);
     }
     public async Task<IPage> GetPage()

@@ -7,9 +7,9 @@ namespace Interview.PdfCreation.Features.RenderCityMap;
 
 public static class RenderCityMapEndpoint
 {
-    public static async Task<FileContentHttpResult> Execute(string city, IBrowserWrapper browserWrapper)
+    public static async Task<FileContentHttpResult> Execute(string name, IBrowserWrapper browserWrapper)
     {
-        var cityEncoded = city.Replace(" ", "%2B");
+        var cityEncoded = name.Replace(" ", "%2B");
         var page = await browserWrapper.GetPage();
         await page.GotoAsync("https://consent.google.com/m?continue=https://www.google.com/maps/place/" + cityEncoded + "&gl=DE&m=0&pc=m&uxe=eomtm&cm=2&hl=en&src=1");
 
@@ -23,8 +23,7 @@ public static class RenderCityMapEndpoint
         {
             PrintBackground = true
         });
-        await page.CloseAsync();
 
-        return TypedResults.File(pdf, MediaTypeNames.Application.Pdf, city + ".pdf");
+        return TypedResults.File(pdf, MediaTypeNames.Application.Pdf, name + ".pdf");
     }
 }
